@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SecretCoder</string>
+    <string name="enter_your_message">Enter your message</string>
+    <string name="enter_your_secret_message">Enter your secret message</string>
+    <string name="enter_your_key">Enter your key</string>
+    <string name="encode">Encode</string>
+    <string name="your_result_will_be_shown_here">Your result will be shown here</string>
+    <string name="decode">Decode</string>
+    <string name="aes_ecb">AES-ECB</string>
+    <string name="aes_cbc">AES-CBC</string>
+</resources>
