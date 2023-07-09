@@ -28,15 +28,21 @@ public class BinaryEncoder {
         return cipherText;
     }
 
+    private String convertInputToBinaryString(String input) {
+        byte[] inputBytes = convertStringToBytes(input);
+        String inputBinary = convertBytesToBinary(inputBytes);
+        return inputBinary;
+    }
+
     private String convertBinaryToZeroWidthString(String inputBinary) {
         int secretBinaryLength = inputBinary.length();
         StringBuilder zeroWidthBinaryMessage = new StringBuilder();
         for (int i = 0; i < secretBinaryLength; i++) {
-            if (inputBinary.charAt(i) == Constants.ZWNJ_CHAR_AS_ZERO)
+            if (inputBinary.charAt(i) == Constants.ZERO_CHAR)
                 zeroWidthBinaryMessage.append(Constants.ZWNJ_CHAR_AS_ZERO);//0 char
-            else if (inputBinary.charAt(i) == Constants.ZWJ_CHAR_AS_ONE)
+            else if (inputBinary.charAt(i) == Constants.ONE_CHAR)
                 zeroWidthBinaryMessage.append(Constants.ZWJ_CHAR_AS_ONE);//1 char
-            else if (inputBinary.charAt(i) == Constants.ZERO_WIDTH_SPACE_CHAR)
+            else if (inputBinary.charAt(i) == Constants.SPACE_CHAR)
                 zeroWidthBinaryMessage.append(Constants.ZERO_WIDTH_SPACE_CHAR);//space char
         }
         return zeroWidthBinaryMessage.toString();
@@ -48,13 +54,6 @@ public class BinaryEncoder {
         encodedMessage += (message.substring(1));
         return encodedMessage;
     }
-
-    private String convertInputToBinaryString(String input) {
-        byte[] inputBytes = convertStringToBytes(input);
-        String inputBinary = convertBytesToBinary(inputBytes);
-        return inputBinary;
-    }
-
 
     private byte[] convertStringToBytes(String input) {
         byte[] inputBytes = input.getBytes();

@@ -1,29 +1,31 @@
 package com.example.secretcoder;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.secretcoder.binary.BinaryDecoder;
 import com.example.secretcoder.binary.BinaryEncoder;
+import com.example.secretcoder.constants.Constants;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextInputEditText main_ETXT_message;
-    private TextInputEditText main_ETXT_secret;
-    private TextInputEditText main_ETXT_key;
-    private MaterialButton main_BTN_encode;
-    private MaterialButton main_BTN_decode;
-    private SwitchMaterial main_SWT_decode;
+    private TextInputEditText main_ETXT_message, main_ETXT_secret,  main_ETXT_key;
+    private MaterialTextView main_ETXT_output;
+    private MaterialButton main_BTN_encode, main_BTN_decode;
+    private SwitchMaterial main_SWT_decode, main_SWT_ECB, main_SWT_CBC;
 
     private BinaryEncoder binaryEncoder = new BinaryEncoder();
     private BinaryDecoder binaryDecoder = new BinaryDecoder();
-
+    private Toast toaster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +41,70 @@ public class MainActivity extends AppCompatActivity {
         main_ETXT_message = findViewById(R.id.main_ETXT_message);
         main_ETXT_secret = findViewById(R.id.main_ETXT_secret);
         main_ETXT_key = findViewById(R.id.main_ETXT_key);
+        main_ETXT_output = findViewById(R.id.main_ETXT_output);
         main_BTN_encode = findViewById(R.id.main_BTN_encode);
         main_BTN_decode = findViewById(R.id.main_BTN_decode);
         main_SWT_decode = findViewById(R.id.main_SWT_decode);
+        main_SWT_ECB = findViewById(R.id.main_SWT_ECB);
+        main_SWT_CBC = findViewById(R.id.main_SWT_CBC);
     }
 
     private void initViews() {
         main_BTN_encode.setOnClickListener(v -> clickedEncode());
         main_BTN_decode.setOnClickListener(v -> clickedDecode());
         main_SWT_decode.setOnClickListener(v -> codeStateChange());
+        main_SWT_ECB.setOnClickListener(v -> updateEncryptionAlgorithm());
+        main_SWT_CBC.setOnClickListener(v -> updateEncryptionAlgorithm());
+    }
+
+    private void clickedEncode() {
+        main_ETXT_output.setText("");
+        String message, secret, key, encryptionAlgorithm, result;
+        if (TextUtils.isEmpty(main_ETXT_message.getText())) {
+            showToastError("Please enter a message");
+        }
+        if (TextUtils.isEmpty(main_ETXT_secret.getText())) {
+            showToastError("Please enter a secret");
+        }
+        if (TextUtils.isEmpty(main_ETXT_key.getText())) {
+            showToastError("Please enter a key");
+        }
+        message = main_ETXT_message.getText().toString();
+        secret = main_ETXT_secret.getText().toString();
+        key = main_ETXT_key.getText().toString();
+
+        // choose encryption algorithm by seeing which switch is checked
+        encryptionAlgorithm = getEncryptionAlgorithm();
+
+        result = binaryEncoder.encodeText(message, secret, key, encryptionAlgorithm);
+        main_ETXT_output.setText(result);
+    }
+
+    private void clickedDecode() {
+        main_ETXT_output.setText("");
+        String message, key, encryptionAlgorithm, result;
+        if (TextUtils.isEmpty(main_ETXT_message.getText())) {
+            showToastError("Please enter a message");
+        }
+        if (TextUtils.isEmpty(main_ETXT_key.getText())) {
+            showToastError("Please enter a key");
+        }
+        message = main_ETXT_message.getText().toString();
+        key = main_ETXT_key.getText().toString();
+
+        // choose encryption algorithm by seeing which switch is checked
+        encryptionAlgorithm = getEncryptionAlgorithm();
+
+        result = binaryDecoder.decodeText(message, key, encryptionAlgorithm);
+        main_ETXT_output.setText(result);
+    }
+
+    private void updateEncryptionAlgorithm() {
+        if (main_SWT_ECB.isChecked()) {
+            main_SWT_CBC.setChecked(false);
+        } else if (main_SWT_CBC.isChecked()) {
+            main_SWT_ECB.setChecked(false);
+        }
     }
 
     private void codeStateChange() {
@@ -60,24 +117,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void clickedEncode() {
-        String message, secret, key, encryptionAlgorithm, result;
-        if (TextUtils.isEmpty(main_ETXT_message.getText())){
-
-        }
-        if (TextUtils.isEmpty(main_ETXT_secret.getText())){
-
-        }
-        if (TextUtils.isEmpty(main_ETXT_key.getText())){
-
-        }
-        message = main_ETXT_message.getText().toString();
-        secret = main_ETXT_secret.getText().toString();
-        key = main_ETXT_key.getText().toString();
-        binaryEncoder.encodeText(message,  secret,  key,  encryptionAlgorithm);
+    @NonNull
+    private String getEncryptionAlgorithm() {
+        if (main_SWT_CBC.isChecked()) {
+            return Constants.AES_CBS_PKCS5_ALGORITHM;
+        } else if (main_SWT_CBC.isChecked())
+            return Constants.AES_ECB_PKCS5_ALGORITHM;
+        else
+            return Constants.AES_CBS_PKCS5_ALGORITHM;
     }
 
-    private void clickedDecode() {
-
+    private void showToastError(String errorMessage) {
+        toaster = Toast
+                .makeText(this, errorMessage, Toast.LENGTH_SHORT);
+        toaster.show();
     }
 }
