@@ -18,13 +18,13 @@ import com.google.android.material.textview.MaterialTextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextInputEditText main_ETXT_message, main_ETXT_secret,  main_ETXT_key;
+    private TextInputEditText main_ETXT_message, main_ETXT_secret, main_ETXT_key;
     private MaterialTextView main_ETXT_output;
     private MaterialButton main_BTN_encode, main_BTN_decode;
     private SwitchMaterial main_SWT_decode, main_SWT_ECB, main_SWT_CBC;
 
-    private BinaryEncoder binaryEncoder = new BinaryEncoder();
-    private BinaryDecoder binaryDecoder = new BinaryDecoder();
+    private final BinaryEncoder binaryEncoder = new BinaryEncoder();
+    private final BinaryDecoder binaryDecoder = new BinaryDecoder();
     private Toast toaster;
 
     @Override
@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
         findViews();
         initViews();
-
     }
 
     private void findViews() {
@@ -61,13 +60,16 @@ public class MainActivity extends AppCompatActivity {
         main_ETXT_output.setText("");
         String message, secret, key, encryptionAlgorithm, result;
         if (TextUtils.isEmpty(main_ETXT_message.getText())) {
-            showToastError("Please enter a message");
+            showToast("Please enter a message");
+            return;
         }
         if (TextUtils.isEmpty(main_ETXT_secret.getText())) {
-            showToastError("Please enter a secret");
+            showToast("Please enter a secret");
+            return;
         }
         if (TextUtils.isEmpty(main_ETXT_key.getText())) {
-            showToastError("Please enter a key");
+            showToast("Please enter a key");
+            return;
         }
         message = main_ETXT_message.getText().toString();
         secret = main_ETXT_secret.getText().toString();
@@ -78,16 +80,19 @@ public class MainActivity extends AppCompatActivity {
 
         result = binaryEncoder.encodeText(message, secret, key, encryptionAlgorithm);
         main_ETXT_output.setText(result);
+        showToast("Please copy the result");
     }
 
     private void clickedDecode() {
         main_ETXT_output.setText("");
         String message, key, encryptionAlgorithm, result;
         if (TextUtils.isEmpty(main_ETXT_message.getText())) {
-            showToastError("Please enter a message");
+            showToast("Please enter a message");
+            return;
         }
         if (TextUtils.isEmpty(main_ETXT_key.getText())) {
-            showToastError("Please enter a key");
+            showToast("Please enter a key");
+            return;
         }
         message = main_ETXT_message.getText().toString();
         key = main_ETXT_key.getText().toString();
@@ -127,9 +132,11 @@ public class MainActivity extends AppCompatActivity {
             return Constants.AES_CBS_PKCS5_ALGORITHM;
     }
 
-    private void showToastError(String errorMessage) {
+    private void showToast(String message) {
+        if (toaster != null)
+            toaster.cancel();
         toaster = Toast
-                .makeText(this, errorMessage, Toast.LENGTH_SHORT);
+                .makeText(this, message, Toast.LENGTH_SHORT);
         toaster.show();
     }
 }

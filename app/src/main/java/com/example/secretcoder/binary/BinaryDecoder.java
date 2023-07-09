@@ -21,23 +21,32 @@ public class BinaryDecoder {
 
     private String getZeroWidthStringFromMessage(String message) {
         StringBuilder zwString = new StringBuilder();
-        int charIndex = 1;
-        while (true) {
-            char currentChar = message.charAt(charIndex);
-            if (currentChar == Constants.ZWNJ_CHAR_AS_ZERO ||
-                    currentChar == Constants.ZWJ_CHAR_AS_ONE ||
-                    currentChar == Constants.ZERO_WIDTH_SPACE_CHAR)
-                break;
-            else {
-                if (currentChar == Constants.ZWNJ_CHAR_AS_ZERO)
-                    zwString.append(Constants.ZERO_CHAR);
-                if (currentChar == Constants.ZWJ_CHAR_AS_ONE)
-                    zwString.append(Constants.ONE_CHAR);
-                if (currentChar == Constants.ZERO_WIDTH_SPACE_CHAR)
-                    zwString.append(Constants.SPACE_CHAR);
-            }
-            charIndex++;
+        int charIndex = 1, messageLen = message.length();
+        for (int i = 0; i < messageLen; i++) {
+            char currentChar = message.charAt(i);
+            if (currentChar == Constants.ZWNJ_CHAR_AS_ZERO)
+                zwString.append(Constants.ZWNJ_CHAR_AS_ZERO);
+            if (currentChar == Constants.ZWJ_CHAR_AS_ONE)
+                zwString.append(Constants.ZWJ_CHAR_AS_ONE);
+            if (currentChar == Constants.ZERO_WIDTH_SPACE_CHAR)
+                zwString.append(Constants.ZERO_WIDTH_SPACE_CHAR);
         }
+//        while (true) {
+//            char currentChar = message.charAt(charIndex);
+//            if (currentChar == Constants.ZWNJ_CHAR_AS_ZERO ||
+//                    currentChar == Constants.ZWJ_CHAR_AS_ONE ||
+//                    currentChar == Constants.ZERO_WIDTH_SPACE_CHAR)
+//                break;
+//            else {
+//                if (currentChar == Constants.ZWNJ_CHAR_AS_ZERO)
+//                    zwString.append(Constants.ZERO_CHAR);
+//                if (currentChar == Constants.ZWJ_CHAR_AS_ONE)
+//                    zwString.append(Constants.ONE_CHAR);
+//                if (currentChar == Constants.ZERO_WIDTH_SPACE_CHAR)
+//                    zwString.append(Constants.SPACE_CHAR);
+//            }
+//            charIndex++;
+//        }
         return zwString.toString();
     }
 
@@ -45,20 +54,26 @@ public class BinaryDecoder {
         int secretBinaryLength = inputBinary.length();
         StringBuilder binaryMessage = new StringBuilder();
         for (int i = 0; i < secretBinaryLength; i++) {
-            if (inputBinary.charAt(i) == Constants.ZERO_CHAR)
-                binaryMessage.append(Constants.ZWNJ_CHAR_AS_ZERO);//0 char
-            else if (inputBinary.charAt(i) == Constants.ONE_CHAR)
-                binaryMessage.append(Constants.ZWJ_CHAR_AS_ONE);//1 char
-            else if (inputBinary.charAt(i) == Constants.SPACE_CHAR)
-                binaryMessage.append(Constants.ZERO_WIDTH_SPACE_CHAR);//space char
+            char currentChar = inputBinary.charAt(i);
+            if (currentChar == Constants.ZWNJ_CHAR_AS_ZERO)
+                binaryMessage.append(Constants.ZERO_CHAR);//0 char
+            else if (currentChar == Constants.ZWJ_CHAR_AS_ONE)
+                binaryMessage.append(Constants.ONE_CHAR);//1 char
+            else if (currentChar == Constants.ZERO_WIDTH_SPACE_CHAR)
+                binaryMessage.append(Constants.SPACE_CHAR);//space char
         }
         return binaryMessage.toString();
     }
 
     private String convertBinaryToTextString(String encryptedBinaryMessage) {
         StringBuilder asciiString = new StringBuilder();
-        for (int i = 0; i < encryptedBinaryMessage.length(); i += 8) {
-            String binaryChar = encryptedBinaryMessage.substring(i, i + 8);
+        int messageLen = encryptedBinaryMessage.length();
+        for (int i = 0; i < messageLen; i += Constants.BYTE_SIZE) {
+            if(encryptedBinaryMessage.charAt(i) == Constants.SPACE_CHAR)
+                i++;
+            if(i + Constants.BYTE_SIZE > messageLen)
+                break;
+            String binaryChar = encryptedBinaryMessage.substring(i, i + Constants.BYTE_SIZE);
             int asciiValue = Integer.parseInt(binaryChar, 2);
             asciiString.append((char) asciiValue);
         }
