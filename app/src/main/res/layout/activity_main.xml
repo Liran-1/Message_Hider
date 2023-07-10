@@ -17,6 +17,32 @@
         android:paddingEnd="20dp"
         android:paddingBottom="20dp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message Hider 9000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-------------------------"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1)Write your message\n2)Write the secret you wish to hide in the message\n3)Write a 16\\24\\32 character long key.
+            \n4)Afterwards choose your preferred encryption method.\n5)encode your message.\n6)Copy the result (make sure to copy the whole message!)"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            />
+
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/main_ETXT_message"
             android:layout_width="match_parent"
@@ -43,6 +69,49 @@
             android:inputType="text"
             android:textSize="20sp" />
 
+
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/main_SWT_decode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/decode" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Encryption method:"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/main_SWT_ECB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:textStyle=""
+                android:text="@string/aes_ecb" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/main_SWT_CBC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:text="@string/aes_cbc" />
+
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/main_BTN_encode"
             android:layout_width="wrap_content"
@@ -54,47 +123,18 @@
             android:id="@+id/main_BTN_decode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/encode"
-            android:visibility="gone"
-            android:textSize="16sp" />
+            android:text="@string/decode"
+            android:textSize="16sp"
+            android:visibility="gone" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/main_ETXT_output"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:hint="@string/your_result_will_be_shown_here"
             android:textIsSelectable="true"
-            android:gravity="center"
             android:textSize="20sp" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/main_SWT_decode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/decode"
-            android:gravity="center_vertical"
-            />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/main_SWT_ECB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/aes_ecb"
-            android:gravity="center_vertical"
-            android:checked="true"
-            />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/main_SWT_CBC"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/aes_cbc"
-            android:gravity="center_vertical"
-            />
-
-
-
     </LinearLayout>
-
 
 </RelativeLayout>

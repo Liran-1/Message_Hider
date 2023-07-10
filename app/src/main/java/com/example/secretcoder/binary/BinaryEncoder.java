@@ -1,40 +1,47 @@
 package com.example.secretcoder.binary;
 
+import androidx.annotation.NonNull;
+
 import com.example.secretcoder.constants.Constants;
 import com.example.secretcoder.encyptions.AESUtil;
 
 public class BinaryEncoder {
 
-    public BinaryEncoder(){
+    public BinaryEncoder() {
     }
 
     public String encodeText(String message, String secret, String key, String encryptionAlgorithm) {
+        String encryptedMessaged, encryptedInputBinary, hiddenMessage, encodedText;
 
         // Encrypt the message using AES encryption
-        String encryptedMessaged = encryptMessage(encryptionAlgorithm, secret, key);
-        if(encryptedMessaged == null)
+        encryptedMessaged = encryptMessage(encryptionAlgorithm, secret, key);
+        if (encryptedMessaged == null)
             return null;
         // Convert the encrypted message to a binary string
-        String encryptedInputBinary = convertInputToBinaryString(encryptedMessaged);
+        encryptedInputBinary = convertInputToBinaryString(encryptedMessaged);
         // Convert the binary string to a Zero-Width string
-        String hiddenMessage = convertBinaryToZeroWidthString(encryptedInputBinary);
+        hiddenMessage = convertBinaryToZeroWidthString(encryptedInputBinary);
         // Insert the Zero-Width string into the original message
-        String encodedText = insertZeroWidthStringToMessage(message, hiddenMessage);
+        encodedText = insertZeroWidthStringToMessage(message, hiddenMessage);
         return encodedText;
     }
 
     private String encryptMessage(String encryptionAlgorithm, String secret, String key) {
-        String cipherText = AESUtil.encrypt(encryptionAlgorithm, secret, key);
+        String cipherText;
+        cipherText = AESUtil.encrypt(encryptionAlgorithm, secret, key);
         return cipherText;
     }
 
+    @NonNull
     private String convertInputToBinaryString(String input) {
         byte[] inputBytes = convertStringToBytes(input);
-        String inputBinary = convertBytesToBinary(inputBytes);
+        String inputBinary;
+        inputBinary = convertBytesToBinary(inputBytes);
         return inputBinary;
     }
 
-    private String convertBinaryToZeroWidthString(String inputBinary) {
+    @NonNull
+    private String convertBinaryToZeroWidthString(@NonNull String inputBinary) {
         int secretBinaryLength = inputBinary.length();
         StringBuilder zeroWidthBinaryMessage = new StringBuilder();
         for (int i = 0; i < secretBinaryLength; i++) {
@@ -48,28 +55,31 @@ public class BinaryEncoder {
         return zeroWidthBinaryMessage.toString();
     }
 
-    private String insertZeroWidthStringToMessage(String message, String hiddenMessage) {
+    @NonNull
+    private String insertZeroWidthStringToMessage(@NonNull String message, String hiddenMessage) {
         String encodedMessage = String.valueOf(message.charAt(0));
         encodedMessage += hiddenMessage;
         encodedMessage += (message.substring(1));
         return encodedMessage;
     }
 
-    private byte[] convertStringToBytes(String input) {
-        byte[] inputBytes = input.getBytes();
+    private byte[] convertStringToBytes(@NonNull String input) {
+        byte[] inputBytes;
+        inputBytes = input.getBytes();
         return inputBytes;
     }
 
-    private String convertBytesToBinary(byte[] inputBytes) {
+    @NonNull
+    private String convertBytesToBinary(@NonNull byte[] inputBytes) {
         StringBuilder inputBinary = new StringBuilder();
         for (byte b : inputBytes) {
-            int value = b;
-            inputBinary.append(convertByteToBinary(value));
-            inputBinary.append(" ");
+            inputBinary.append(convertByteToBinary(b));
+            inputBinary.append(' ');
         }
         return inputBinary.toString();
     }
 
+    @NonNull
     private String convertByteToBinary(int value) {
         StringBuilder inputBinary = new StringBuilder();
         for (int i = 0; i < Constants.BYTE_SIZE; i++) {

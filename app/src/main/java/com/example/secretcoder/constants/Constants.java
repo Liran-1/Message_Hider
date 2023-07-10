@@ -12,7 +12,10 @@ public class Constants {
     public static final String AES_CBS_PKCS5_ALGORITHM = "AES/CBC/PKCS5Padding";
     public static final String AES_ECB_PKCS5_ALGORITHM = "AES/ECB/PKCS5Padding";
     public static final String IV = "SECRET1234567890";
-
+    public static final String ENTER_MESSAGE = "Please enter a message";
+    public static final String ENTER_SECRET = "Please enter a secret";
+    public static final String ENTER_KEY = "Please enter a key";
+    public static final String COPY_RESULT = "Please copy the result";
 
     public static final String AES = "AES";
 }

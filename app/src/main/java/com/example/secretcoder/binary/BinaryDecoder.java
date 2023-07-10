@@ -1,5 +1,7 @@
 package com.example.secretcoder.binary;
 
+import androidx.annotation.NonNull;
+
 import com.example.secretcoder.constants.Constants;
 import com.example.secretcoder.encyptions.AESUtil;
 
@@ -7,21 +9,23 @@ public class BinaryDecoder {
 
 
     public String decodeText(String encodedMessage, String key, String encryptionAlgorithm) {
+        String hiddenMessage, encryptedBinaryMessage, encryptedMessage, decodedText;
 
         // Get the Zero-Width string from the encoded message
-        String hiddenMessage = getZeroWidthStringFromMessage(encodedMessage);
+        hiddenMessage = getZeroWidthStringFromMessage(encodedMessage);
         // Convert the Zero-Width string to a binary string
-        String encryptedBinaryMessage = convertZeroWidthToBinaryString(hiddenMessage);
+        encryptedBinaryMessage = convertZeroWidthToBinaryString(hiddenMessage);
         // Convert the binary string to a encrypted message
-        String encryptedMessage = convertBinaryToTextString(encryptedBinaryMessage);
+        encryptedMessage = convertBinaryToTextString(encryptedBinaryMessage);
         // Decrypt the message using AES encryption
-        String decodedText = decryptMessage(encryptionAlgorithm, encryptedMessage, key);
+        decodedText = decryptMessage(encryptionAlgorithm, encryptedMessage, key);
         return decodedText;
     }
 
-    private String getZeroWidthStringFromMessage(String message) {
+    @NonNull
+    private String getZeroWidthStringFromMessage(@NonNull String message) {
         StringBuilder zwString = new StringBuilder();
-        int charIndex = 1, messageLen = message.length();
+        int messageLen = message.length();
         for (int i = 0; i < messageLen; i++) {
             char currentChar = message.charAt(i);
             if (currentChar == Constants.ZWNJ_CHAR_AS_ZERO)
@@ -31,26 +35,12 @@ public class BinaryDecoder {
             if (currentChar == Constants.ZERO_WIDTH_SPACE_CHAR)
                 zwString.append(Constants.ZERO_WIDTH_SPACE_CHAR);
         }
-//        while (true) {
-//            char currentChar = message.charAt(charIndex);
-//            if (currentChar == Constants.ZWNJ_CHAR_AS_ZERO ||
-//                    currentChar == Constants.ZWJ_CHAR_AS_ONE ||
-//                    currentChar == Constants.ZERO_WIDTH_SPACE_CHAR)
-//                break;
-//            else {
-//                if (currentChar == Constants.ZWNJ_CHAR_AS_ZERO)
-//                    zwString.append(Constants.ZERO_CHAR);
-//                if (currentChar == Constants.ZWJ_CHAR_AS_ONE)
-//                    zwString.append(Constants.ONE_CHAR);
-//                if (currentChar == Constants.ZERO_WIDTH_SPACE_CHAR)
-//                    zwString.append(Constants.SPACE_CHAR);
-//            }
-//            charIndex++;
-//        }
+
         return zwString.toString();
     }
 
-    private String convertZeroWidthToBinaryString(String inputBinary) {
+    @NonNull
+    private String convertZeroWidthToBinaryString(@NonNull String inputBinary) {
         int secretBinaryLength = inputBinary.length();
         StringBuilder binaryMessage = new StringBuilder();
         for (int i = 0; i < secretBinaryLength; i++) {
@@ -65,7 +55,8 @@ public class BinaryDecoder {
         return binaryMessage.toString();
     }
 
-    private String convertBinaryToTextString(String encryptedBinaryMessage) {
+    @NonNull
+    private String convertBinaryToTextString(@NonNull String encryptedBinaryMessage) {
         StringBuilder asciiString = new StringBuilder();
         int messageLen = encryptedBinaryMessage.length();
         for (int i = 0; i < messageLen; i += Constants.BYTE_SIZE) {
@@ -81,38 +72,9 @@ public class BinaryDecoder {
     }
 
     private String decryptMessage(String encryptionAlgorithm, String secret, String key) {
-        String cipherText = AESUtil.decrypt(encryptionAlgorithm, secret, key);
+        String cipherText;
+        cipherText = AESUtil.decrypt(encryptionAlgorithm, secret, key);
         return cipherText;
     }
-
-//    private String convertInputToBinaryString(String input) {
-//        byte[] inputBytes = convertStringToBytes(input);
-//        String inputBinary = convertBytesToBinary(inputBytes);
-//        return inputBinary;
-//    }
-//
-//    private byte[] convertStringToBytes(String input) {
-//        byte[] inputBytes = input.getBytes();
-//        return inputBytes;
-//    }
-//
-//    private String convertBytesToBinary(byte[] inputBytes) {
-//        StringBuilder inputBinary = new StringBuilder();
-//        for (byte b : inputBytes) {
-//            int value = b;
-//            inputBinary.append(convertByteToBinary(value));
-//            inputBinary.append(" ");
-//        }
-//        return inputBinary.toString();
-//    }
-//
-//    private String convertByteToBinary(int value) {
-//        StringBuilder inputBinary = new StringBuilder();
-//        for (int i = 0; i < Constants.BYTE_SIZE; i++) {
-//            inputBinary.append((value & 128) == 0 ? 0 : 1);
-//            value <<= 1;
-//        }
-//        return inputBinary.toString();
-//    }
 
 }
