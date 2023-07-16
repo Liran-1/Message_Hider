@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         encryptionAlgorithm = getEncryptionAlgorithm();
 
         result = binaryEncoder.encodeText(message, secret, key, encryptionAlgorithm);
+        main_ETXT_message.setText("");
         main_ETXT_secret.setText("");
         main_ETXT_output.setText(result);
         showToast(Constants.COPY_RESULT);
