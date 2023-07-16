@@ -16,6 +16,10 @@ public class Constants {
     public static final String ENTER_SECRET = "Please enter a secret";
     public static final String ENTER_KEY = "Please enter a key";
     public static final String COPY_RESULT = "Please copy the result";
-
     public static final String AES = "AES";
+    public static final int KEY_LENGTH16 = 16;
+    public static final int KEY_LENGTH24 = 24;
+    public static final int KEY_LENGTH32 = 32;
+    public static final int HIGH_END_RANDOM = 122;
+    public static final int LOW_END_RANDOM = 33;
 }

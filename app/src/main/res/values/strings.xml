@@ -1,11 +1,17 @@
 <resources>
-    <string name="app_name">SecretCoder</string>
+    <string name="app_name">Message Hider 9000</string>
+    <string name="divider">-------------------------</string>
     <string name="enter_your_message">Enter your message</string>
     <string name="enter_your_secret_message">Enter your secret message</string>
     <string name="enter_your_key">Enter your key</string>
-    <string name="encode">Encode</string>
-    <string name="your_result_will_be_shown_here">Your result will be shown here</string>
-    <string name="decode">Decode</string>
+    <string name="generate_key">Generate\nKey</string>
+    <string name="encryption_method">Encryption method:</string>
     <string name="aes_ecb">AES-ECB</string>
     <string name="aes_cbc">AES-CBC</string>
+    <string name="instructions">Instructions:</string>
+    <string name="encode_instructions">\n1)Write your message\n2)Write the secret you wish to hide in the message\n3)Write a 16\\24\\32 character long key. \n4)Afterwards choose your preferred encryption method.\n5)encode your message.\n6)Copy the result (make sure to copy the whole message!)</string>
+    <string name="decode_instructions">\n1)Write your message\n2)Write the 16\\24\\32 character long key to decode.\n3)Afterwards choose the decryption method used to encrypt.\n4)decode your message.</string>
+    <string name="encode">Encode</string>
+    <string name="decode">Decode</string>
+    <string name="your_result_will_be_shown_here">Your result will be shown here</string>
 </resources>
